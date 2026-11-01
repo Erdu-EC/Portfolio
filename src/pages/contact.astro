@@ -155,17 +155,17 @@ import { personal } from '../config/personal'
     form.addEventListener('submit', function(e) {
       e.preventDefault()
 
-      var name = document.getElementById('name') as HTMLInputElement | null
-      var email = document.getElementById('email') as HTMLInputElement | null
-      var subject = document.getElementById('subject') as HTMLInputElement | null
-      var message = document.getElementById('message') as HTMLTextAreaElement | null
+      const name = document.getElementById('name') as HTMLInputElement | null
+      const email = document.getElementById('email') as HTMLInputElement | null
+      const subject = document.getElementById('subject') as HTMLInputElement | null
+      const message = document.getElementById('message') as HTMLTextAreaElement | null
 
-      var mailtoSubject = encodeURIComponent((subject && subject.value) || 'Contacto desde portafolio')
-      var mailtoBody = encodeURIComponent(
+      const mailtoSubject = encodeURIComponent((subject && subject.value) || 'Contacto desde portafolio')
+      const mailtoBody = encodeURIComponent(
         'Nombre: ' + (name && name.value || '') + '\nEmail: ' + (email && email.value || '') + '\n\n' + (message && message.value || '')
       )
 
-      var mailtoLink = 'mailto:' + contactEmail + '?subject=' + mailtoSubject + '&body=' + mailtoBody
+      const mailtoLink = 'mailto:' + contactEmail + '?subject=' + mailtoSubject + '&body=' + mailtoBody
       window.open(mailtoLink, '_blank')
 
       if (statusEl) {
