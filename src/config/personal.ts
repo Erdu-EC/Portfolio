@@ -8,6 +8,9 @@ export const personal = {
     fullName: 'Eduardo Castillo',
     shortName: 'Erdu-EC',
     jobTitle: 'Full Stack Developer',
+    avatar: '/images/avatar-1024.png',
+    avatarSmall: '/images/avatar-64.png',
+    avatarMedium: '/images/avatar-256.png',
 
     // Descripción profesional
     tagline: 'Ingeniero en Telemática y Full Stack Developer con más de 5 años de experiencia creando soluciones robustas y escalables. Especializado en .NET y TypeScript.',
