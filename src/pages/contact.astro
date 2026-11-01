@@ -155,10 +155,10 @@ import { personal } from '../config/personal'
     form.addEventListener('submit', function(e) {
       e.preventDefault()
 
-      var name = document.getElementById('name')
-      var email = document.getElementById('email')
-      var subject = document.getElementById('subject')
-      var message = document.getElementById('message')
+      var name = document.getElementById('name') as HTMLInputElement | null
+      var email = document.getElementById('email') as HTMLInputElement | null
+      var subject = document.getElementById('subject') as HTMLInputElement | null
+      var message = document.getElementById('message') as HTMLTextAreaElement | null
 
       var mailtoSubject = encodeURIComponent((subject && subject.value) || 'Contacto desde portafolio')
       var mailtoBody = encodeURIComponent(

@@ -67,9 +67,9 @@ const postsForClient = posts.map((p) => ({
   </section>
 </Layout>
 
-<script is:inline>
+<script define:vars={{ postsForClient }}>
   // Client-side tag filtering for blog posts
-  var postsData = { postsForClient }
+  var postsData = postsForClient
   const tagButtons = document.querySelectorAll('.tag-btn')
   const postsGrid = document.getElementById('posts-grid')
 
