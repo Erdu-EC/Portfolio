@@ -1,0 +1,19 @@
+{
+  "name": "Eduardo Castillo — Portafolio",
+  "short_name": "Eduardo Castillo",
+  "description": "Portafolio de Eduardo Castillo - Ingeniero en Telemática y Full Stack Developer",
+  "start_url": "/",
+  "display": "standalone",
+  "theme_color": "#4f46e5",
+  "background_color": "#ffffff",
+  "lang": "es",
+  "dir": "ltr",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

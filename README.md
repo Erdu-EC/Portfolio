@@ -1,7 +1,6 @@
 # Portafolio de Eduardo Castillo
 
-Portafolio personal construido con **Astro 7** y **Tailwind CSS 4**, inspirado en el template [Nuxt UI Portfolio](https://github.com/nuxt-ui-templates/portfolio).
-
+Portafolio personal construido con **Astro 7** y **Tailwind CSS 4**.
 ## 🚀 Tecnologías
 
 - [Astro 7](https://astro.build) — Framework web de nueva generación

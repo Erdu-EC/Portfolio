@@ -1,0 +1,115 @@
+---
+import Layout from '../../layouts/Layout.astro'
+import BlogPostCard from '../../components/BlogPostCard.astro'
+import { getCollection } from 'astro:content'
+
+const allPosts = await getCollection('blog', (entry) => !entry.data.draft)
+const posts = allPosts.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+
+// Collect all tags
+const allTags = new Set<string>()
+posts.forEach((p) => p.data.tags.forEach((t) => allTags.add(t)))
+const tags = Array.from(allTags).sort()
+
+// Pass post data for client-side filtering
+const postsForClient = posts.map((p) => ({
+  id: p.id,
+  title: p.data.title,
+  description: p.data.description,
+  pubDate: p.data.pubDate.toISOString(),
+  tags: p.data.tags,
+}))
+---
+
+<Layout title="Blog">
+  <section class="py-20">
+    <div class="max-w-6xl mx-auto px-4 sm:px-6 lg:px-8">
+      <div class="text-center mb-12">
+        <h1 class="text-4xl font-bold text-gray-900 dark:text-white mb-4">Blog</h1>
+        <p class="text-gray-600 dark:text-gray-400 max-w-2xl mx-auto">
+          Reflexiones, tutoriales y experiencias sobre desarrollo de software,
+          arquitectura y las tecnologías que utilizo a diario.
+        </p>
+      </div>
+
+      <!-- Tags Filter -->
+      <div class="flex flex-wrap justify-center gap-2 mb-12" id="tag-filters">
+        <button
+          data-tag="all"
+          class="tag-btn px-3 py-1 text-sm font-medium rounded-full cursor-pointer bg-primary-100 dark:bg-primary-900/50 text-primary-700 dark:text-primary-300 hover:bg-primary-200 dark:hover:bg-primary-800/50 transition-colors"
+        >
+          Todos
+        </button>
+        {tags.map((tag) => (
+          <button
+            data-tag={tag}
+            class="tag-btn px-3 py-1 text-sm font-medium rounded-full cursor-pointer bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors"
+          >
+            {tag}
+          </button>
+        ))}
+      </div>
+
+      <!-- Posts Grid -->
+      <h2 class="sr-only">Artículos recientes</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="posts-grid">
+        {posts.map((post) => (
+          <BlogPostCard post={post} />
+        ))}
+      </div>
+
+      {posts.length === 0 && (
+        <div class="text-center py-12">
+          <p class="text-gray-500 dark:text-gray-400">Próximamente nuevos artículos...</p>
+        </div>
+      )}
+    </div>
+  </section>
+</Layout>
+
+<script is:inline>
+  // Client-side tag filtering for blog posts
+  var postsData = { postsForClient }
+  const tagButtons = document.querySelectorAll('.tag-btn')
+  const postsGrid = document.getElementById('posts-grid')
+
+  function renderPosts(filterTag) {
+    const filtered = filterTag === 'all'
+      ? postsData
+      : postsData.filter(p => p.tags.includes(filterTag))
+
+    if (postsGrid) {
+      if (filtered.length === 0) {
+        postsGrid.innerHTML = '<div class="col-span-full text-center py-12"><p class="text-gray-500 dark:text-gray-400">No hay artículos con esta etiqueta.</p></div>'
+        return
+      }
+      postsGrid.innerHTML = filtered.map(p => {
+        const date = new Date(p.pubDate).toLocaleDateString('es-ES', {
+          year: 'numeric',
+          month: 'long',
+          day: 'numeric',
+        })
+        const tagsHTML = p.tags.map(t => `<span class="px-2 py-1 text-xs font-medium rounded-full bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400">${t}</span>`).join('')
+        return `<article class="group p-6 rounded-2xl border border-gray-200 dark:border-gray-800 bg-white dark:bg-gray-900 hover:border-primary-300 dark:hover:border-primary-700 transition-all duration-300 hover:shadow-lg hover:shadow-primary-500/5 flex flex-col h-full">
+          <div class="mb-4"><time class="text-xs font-medium text-primary-600 dark:text-primary-400">${date}</time></div>
+          <h3 class="text-lg font-semibold text-gray-900 dark:text-white mb-3 group-hover:text-primary-600 dark:group-hover:text-primary-400 transition-colors"><a href="/blog/${p.id}" class="hover:underline">${p.title}</a></h3>
+          <p class="text-sm text-gray-600 dark:text-gray-400 leading-relaxed mb-4 flex-grow">${p.description}</p>
+          <div class="flex flex-wrap gap-2 pt-4 border-t border-gray-100 dark:border-gray-800">${tagsHTML}</div>
+        </article>`
+      }).join('')
+    }
+  }
+
+  tagButtons.forEach(btn => {
+    btn.addEventListener('click', () => {
+      const tag = btn.dataset.tag
+      tagButtons.forEach(b => {
+        b.classList.remove('bg-primary-100', 'dark:bg-primary-900/50', 'text-primary-700', 'dark:text-primary-300')
+        b.classList.add('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-400')
+      })
+      btn.classList.remove('bg-gray-100', 'dark:bg-gray-800', 'text-gray-600', 'dark:text-gray-400')
+      btn.classList.add('bg-primary-100', 'dark:bg-primary-900/50', 'text-primary-700', 'dark:text-primary-300')
+      renderPosts(tag)
+    })
+  })
+</script>
