@@ -80,9 +80,9 @@ const projectsForClient = allProjects.map((p) => ({
   </section>
 </Layout>
 
-<script is:inline>
+<script define:vars={{ projectsForClient }}>
   // Client-side tag filtering
-  const projectsData = { projectsForClient }
+  const projectsData = projectsForClient
   const tagButtons = document.querySelectorAll('.tag-btn')
   const featuredGrid = document.getElementById('featured-grid')
   const othersGrid = document.getElementById('others-grid')
